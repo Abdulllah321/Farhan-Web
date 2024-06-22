@@ -1,198 +1,144 @@
-import '../index.css';
-import 'flowbite';
-import React, { useState } from 'react';
+// Navbar.jsx
+import React, { useState } from "react";
+import { motion } from "framer-motion";
+import { MenuIcon, XIcon } from "@heroicons/react/outline"; // Icons for the mobile menu
 
-function NavBar () {
-  const [openDropdown, setOpenDropdown] = useState(null);
+const DropdownMenu = ({ title, description }) => (
+  <div className="p-4">
+    <h3 className="font-bold">{title}</h3>
+    <p>{description}</p>
+  </div>
+);
 
-  const toggleDropdown = (dropdown) => {
-    setOpenDropdown(openDropdown === dropdown ? null : dropdown);
-  };
+const MegaMenu = ({ isVisible }) => (
+  <motion.div
+    className="absolute top-full left-0 w-full bg-white shadow-lg grid grid-cols-1 md:grid-cols-3 p-8"
+    initial={{ opacity: 0, y: -10 }}
+    animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : -10 }}
+    transition={{ duration: 0.3 }}
+  >
+    <DropdownMenu title="Title 1" description="Description 1" />
+    <DropdownMenu title="Title 2" description="Description 2" />
+    <DropdownMenu title="Title 3" description="Description 3" />
+  </motion.div>
+);
+
+const Navbar = () => {
+  const [dropdownVisible, setDropdownVisible] = useState({
+    welfare: false,
+    spirituality: false,
+    publications: false,
+  });
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <nav className="bg-white border-gray-200 dark:border-gray-600 dark:bg-gray-900">
-      <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl p-4">
-        <a href="https://flowbite.com" className="flex items-center space-x-3 rtl:space-x-reverse">
-          <img src="https://flowbite.com/docs/images/logo.svg" className="h-8" alt="Flowbite Logo" />
-          <span className="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Logo</span>
-        </a>
-        <button
-          data-collapse-toggle="mega-menu-full-cta"
-          type="button"
-          className="inline-flex items-center p-2 w-10 h-10 justify-center text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600"
-          aria-controls="mega-menu-full-cta"
-          aria-expanded="false"
+    <nav className="bg-gray-800 text-white p-4">
+      <div className="container mx-auto flex items-center justify-between">
+        <div className="text-xl font-bold">Logo</div>
+        <div className="md:hidden">
+          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
+            {mobileMenuOpen ? (
+              <XIcon className="h-6 w-6" />
+            ) : (
+              <MenuIcon className="h-6 w-6" />
+            )}
+          </button>
+        </div>
+        <ul
+          className={`md:flex space-x-4 hidden ${
+            mobileMenuOpen ? "block" : "hidden"
+          }`}
         >
-          <span className="sr-only">Open main menu</span>
-          <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
-            <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 1h15M1 7h15M1 13h15" />
-          </svg>
-        </button>
-        <div id="mega-menu-full-cta" className="items-center justify-between hidden w-full md:flex md:w-auto md:order-1">
-          <ul className="flex flex-col mt-4 font-medium md:flex-row md:mt-0 md:space-x-8 rtl:space-x-reverse">
-            <li>
-              <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                aria-current="page"
-              >
-                Home
-              </a>
-            </li>
-            <li>
-              <a
-                href="#"
-                className="block py-2 px-3 text-gray-900 border-b border-gray-100 hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-                aria-current="page"
-              >
-                About
-              </a>
-            </li>
-            <li>
-              <button
-                onClick={() => toggleDropdown('education')}
-                className="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Education
-                <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                </svg>
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => toggleDropdown('welfare')}
-                className="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Welfare
-                <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                </svg>
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => toggleDropdown('spirituality')}
-                className="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Spirituality
-                <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                </svg>
-              </button>
-            </li>
-            <li>
-              <button
-                onClick={() => toggleDropdown('publications')}
-                className="flex items-center justify-between w-full py-2 px-3 font-medium text-gray-900 border-b border-gray-100 md:w-auto hover:bg-gray-50 md:hover:bg-transparent md:border-0 md:hover:text-blue-600 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-blue-500 md:dark:hover:bg-transparent dark:border-gray-700"
-              >
-                Publications
-                <svg className="w-2.5 h-2.5 ms-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 10 6">
-                  <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
-                </svg>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <div id="mega-menu-full-cta-dropdown" className={`mt-1 bg-white border-gray-200 shadow-sm border-y dark:bg-gray-800 dark:border-gray-600 ${openDropdown ? 'block' : 'hidden'}`}>
-        <div className="grid max-w-screen-xl px-4 py-5 mx-auto text-sm text-gray-500 dark:text-gray-400 md:grid-cols-3 md:px-6">
-          <ul className="space-y-4 sm:mb-4 md:mb-0" aria-labelledby="mega-menu-full-cta-button">
-            {openDropdown === 'education' && (
-              <>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Online Stores</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Segmentation</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Marketing CRM</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Online Stores</a>
-                </li>
-              </>
-            )}
-            {openDropdown === 'welfare' && (
-              <>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Welfare 1</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Welfare 2</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Welfare 3</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Welfare 4</a>
-                </li>
-              </>
-            )}
-            {openDropdown === 'spirituality' && (
-              <>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Spirituality 1</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Spirituality 2</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Spirituality 3</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Spirituality 4</a>
-                </li>
-              </>
-            )}
-            {openDropdown === 'publications' && (
-              <>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Publications 1</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Publications 2</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Publications 3</a>
-                </li>
-                <li>
-                  <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Publications 4</a>
-                </li>
-              </>
-            )}
-          </ul>
-          <ul className="hidden mb-4 space-y-4 md:mb-0 sm:block">
-            <li>
-              <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Our Blog</a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Terms & Conditions</a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">License</a>
-            </li>
-            <li>
-              <a href="#" className="hover:underline hover:text-blue-600 dark:hover:text-blue-500">Resources</a>
-            </li>
-          </ul>
-          <div className="mt-4 md:mt-0">
-            <h2 className="mb-2 font-semibold text-gray-900 dark:text-white">Our brands</h2>
-            <p className="mb-2 text-gray-500 dark:text-gray-400">At Flowbite, we have a portfolio of brands that cater to a variety of preferences.</p>
-            <a href="#" className="inline-flex items-center text-sm font-medium text-blue-600 hover:underline hover:text-blue-600 dark:text-blue-500 dark:hover:text-blue-700">
-              Explore our brands
-              <span className="sr-only">Explore our brands </span>
-              <svg className="w-3 h-3 ms-2 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 10">
-                <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M1 5h12m0 0L9 1m4 4L9 9" />
-              </svg>
+          <li className="hover:text-gray-400">
+            <a href="#home">Home</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#about">About</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#education">Education</a>
+          </li>
+          <li
+            className="relative"
+            onMouseEnter={() =>
+              setDropdownVisible({ ...dropdownVisible, welfare: true })
+            }
+            onMouseLeave={() =>
+              setDropdownVisible({ ...dropdownVisible, welfare: false })
+            }
+          >
+            <a href="#welfare" className="hover:text-gray-400">
+              Welfare
             </a>
-          </div>
-        </div>
+            {dropdownVisible.welfare && (
+              <MegaMenu isVisible={dropdownVisible.welfare} />
+            )}
+          </li>
+          <li
+            className="relative"
+            onMouseEnter={() =>
+              setDropdownVisible({ ...dropdownVisible, spirituality: true })
+            }
+            onMouseLeave={() =>
+              setDropdownVisible({ ...dropdownVisible, spirituality: false })
+            }
+          >
+            <a href="#spirituality" className="hover:text-gray-400">
+              Spirituality
+            </a>
+            {dropdownVisible.spirituality && (
+              <MegaMenu isVisible={dropdownVisible.spirituality} />
+            )}
+          </li>
+          <li
+            className="relative"
+            onMouseEnter={() =>
+              setDropdownVisible({ ...dropdownVisible, publications: true })
+            }
+            onMouseLeave={() =>
+              setDropdownVisible({ ...dropdownVisible, publications: false })
+            }
+          >
+            <a href="#publications" className="hover:text-gray-400">
+              Publications
+            </a>
+            {dropdownVisible.publications && (
+              <MegaMenu isVisible={dropdownVisible.publications} />
+            )}
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#contact">Contact Us</a>
+          </li>
+        </ul>
+      </div>
+      {/* Mobile menu */}
+      <div className={`md:hidden ${mobileMenuOpen ? "block" : "hidden"}`}>
+        <ul className="space-y-4 p-4">
+          <li className="hover:text-gray-400">
+            <a href="#home">Home</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#about">About</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#education">Education</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#welfare">Welfare</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#spirituality">Spirituality</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#publications">Publications</a>
+          </li>
+          <li className="hover:text-gray-400">
+            <a href="#contact">Contact Us</a>
+          </li>
+        </ul>
       </div>
     </nav>
   );
 };
 
-export default NavBar;
+export default Navbar;

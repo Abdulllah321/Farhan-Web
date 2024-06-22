@@ -1,11 +1,14 @@
-import './index.css';
-import 'flowbite';
-import NavBar from './components/navBar'
 
-function App () {
+import Navbar from "./components/navBar";
+import "./index.css";
+import "flowbite";
+
+function App() {
   return (
-    <NavBar></NavBar>
+    <>
+      <Navbar />
+    </>
   );
-};
+}
 
 export default App;
